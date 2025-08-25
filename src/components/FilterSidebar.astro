@@ -1,0 +1,201 @@
+---
+import type { FilterOptions } from '../data/courses';
+import { getUniqueStates, getUniqueAmenities } from '../data/courses';
+
+export interface Props {
+  currentFilters: FilterOptions;
+  resultCount: number;
+}
+
+const { currentFilters, resultCount } = Astro.props;
+
+const states = getUniqueStates();
+const amenities = getUniqueAmenities();
+---
+
+<div class="bg-white rounded-xl shadow-sm p-6 sticky top-4">
+  <div class="flex items-center justify-between mb-6">
+    <h3 class="text-lg font-semibold text-gray-900">Filter Results</h3>
+    <span class="text-sm text-gray-500">{resultCount} courses</span>
+  </div>
+
+  <form method="get" action="/courses" class="space-y-6">
+    <!-- Preserve existing query -->
+    {currentFilters.query && (
+      <input type="hidden" name="q" value={currentFilters.query} />
+    )}
+
+    <!-- State Filter -->
+    <div>
+      <label for="state" class="block text-sm font-medium text-gray-700 mb-3">
+        State/Region
+      </label>
+      <select
+        id="state"
+        name="state"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+      >
+        <option value="">All States</option>
+        {states.map(state => (
+          <option 
+            value={state} 
+            selected={currentFilters.state === state}
+          >
+            {state}
+          </option>
+        ))}
+      </select>
+    </div>
+
+    <!-- Price Category Filter -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-3">
+        Price Range
+      </label>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <input
+            type="radio"
+            name="priceCategory"
+            value=""
+            checked={!currentFilters.priceCategory}
+            class="text-emerald-600 focus:ring-emerald-500"
+          />
+          <span class="ml-2 text-sm text-gray-700">All Prices</span>
+        </label>
+        <label class="flex items-center">
+          <input
+            type="radio"
+            name="priceCategory"
+            value="$"
+            checked={currentFilters.priceCategory === '$'}
+            class="text-emerald-600 focus:ring-emerald-500"
+          />
+          <span class="ml-2 text-sm text-gray-700">$ (Under $13)</span>
+        </label>
+        <label class="flex items-center">
+          <input
+            type="radio"
+            name="priceCategory"
+            value="$$"
+            checked={currentFilters.priceCategory === '$$'}
+            class="text-emerald-600 focus:ring-emerald-500"
+          />
+          <span class="ml-2 text-sm text-gray-700">$$ ($13-17)</span>
+        </label>
+        <label class="flex items-center">
+          <input
+            type="radio"
+            name="priceCategory"
+            value="$$$"
+            checked={currentFilters.priceCategory === '$$$'}
+            class="text-emerald-600 focus:ring-emerald-500"
+          />
+          <span class="ml-2 text-sm text-gray-700">$$$ ($18+)</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Rating Filter -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-3">
+        Minimum Rating
+      </label>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <input
+            type="radio"
+            name="minRating"
+            value=""
+            checked={!currentFilters.minRating}
+            class="text-emerald-600 focus:ring-emerald-500"
+          />
+          <span class="ml-2 text-sm text-gray-700">Any Rating</span>
+        </label>
+        <label class="flex items-center">
+          <input
+            type="radio"
+            name="minRating"
+            value="4"
+            checked={currentFilters.minRating === 4}
+            class="text-emerald-600 focus:ring-emerald-500"
+          />
+          <span class="ml-2 text-sm text-gray-700">4+ Stars</span>
+        </label>
+        <label class="flex items-center">
+          <input
+            type="radio"
+            name="minRating"
+            value="4.5"
+            checked={currentFilters.minRating === 4.5}
+            class="text-emerald-600 focus:ring-emerald-500"
+          />
+          <span class="ml-2 text-sm text-gray-700">4.5+ Stars</span>
+        </label>
+        <label class="flex items-center">
+          <input
+            type="radio"
+            name="minRating"
+            value="4.8"
+            checked={currentFilters.minRating === 4.8}
+            class="text-emerald-600 focus:ring-emerald-500"
+          />
+          <span class="ml-2 text-sm text-gray-700">4.8+ Stars</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Amenities Filter -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-3">
+        Amenities
+      </label>
+      <div class="space-y-2 max-h-48 overflow-y-auto">
+        {amenities.slice(0, 10).map(amenity => (
+          <label class="flex items-center">
+            <input
+              type="checkbox"
+              name="amenities"
+              value={amenity}
+              checked={currentFilters.amenities?.includes(amenity)}
+              class="text-emerald-600 focus:ring-emerald-500"
+            />
+            <span class="ml-2 text-sm text-gray-700">{amenity}</span>
+          </label>
+        ))}
+      </div>
+    </div>
+
+    <!-- Filter Actions -->
+    <div class="space-y-3 pt-4 border-t">
+      <button
+        type="submit"
+        class="w-full px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors"
+      >
+        Apply Filters
+      </button>
+      <a
+        href="/courses"
+        class="w-full inline-block text-center px-4 py-2 text-gray-600 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors"
+      >
+        Clear All
+      </a>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Auto-submit form when filters change for better UX
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form');
+    const inputs = form?.querySelectorAll('select, input[type="radio"]');
+    
+    inputs?.forEach(input => {
+      input.addEventListener('change', () => {
+        if (form) {
+          form.submit();
+        }
+      });
+    });
+  });
+</script>

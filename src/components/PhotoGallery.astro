@@ -1,0 +1,118 @@
+---
+export interface Props {
+  photos: string[];
+  courseName: string;
+}
+
+const { photos, courseName } = Astro.props;
+---
+
+<div class="photo-gallery">
+  <!-- Main Photo -->
+  <div class="mb-4">
+    <div class="aspect-video bg-gradient-to-br from-emerald-100 to-blue-100 rounded-xl overflow-hidden relative">
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="text-center">
+          <div class="text-6xl mb-4">⛳</div>
+          <div class="text-lg text-gray-600">{courseName}</div>
+          <div class="text-sm text-gray-500 mt-2">Main Course Photo</div>
+        </div>
+      </div>
+      <!-- Photo controls overlay -->
+      <div class="absolute top-4 right-4">
+        <button 
+          type="button"
+          class="bg-black bg-opacity-50 text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-opacity-70 transition-opacity"
+          title="View larger photo"
+        >
+          📷 Expand
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Thumbnail Gallery -->
+  {photos.length > 1 && (
+    <div class="grid grid-cols-4 gap-2">
+      {photos.slice(1, 5).map((photo, index) => (
+        <div class="aspect-square bg-gray-200 rounded-lg overflow-hidden relative cursor-pointer hover:opacity-80 transition-opacity">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-2xl mb-1">📸</div>
+              <div class="text-xs text-gray-600">Photo {index + 2}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+      
+      {photos.length > 5 && (
+        <div class="aspect-square bg-gray-800 bg-opacity-75 rounded-lg flex items-center justify-center text-white cursor-pointer hover:bg-opacity-85 transition-colors">
+          <div class="text-center">
+            <div class="text-sm font-medium">+{photos.length - 4}</div>
+            <div class="text-xs">more</div>
+          </div>
+        </div>
+      )}
+    </div>
+  )}
+</div>
+
+<!-- Photo Modal (Placeholder for future implementation) -->
+<div id="photo-modal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-90 flex items-center justify-center">
+  <div class="relative max-w-4xl max-h-[90vh] m-4">
+    <button 
+      id="close-modal"
+      class="absolute top-4 right-4 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-70 transition-opacity"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+    <div class="bg-gray-200 rounded-lg aspect-video flex items-center justify-center">
+      <div class="text-center text-gray-600">
+        <div class="text-4xl mb-2">⛳</div>
+        <div class="text-lg">Course Photo Gallery</div>
+        <div class="text-sm mt-2">Full gallery coming soon!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Simple modal functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const gallery = document.querySelector('.photo-gallery');
+    const modal = document.getElementById('photo-modal');
+    const closeModal = document.getElementById('close-modal');
+    
+    // Open modal when clicking expand button or thumbnails
+    gallery?.addEventListener('click', (e) => {
+      if (e.target instanceof HTMLElement) {
+        if (e.target.closest('button') || e.target.closest('.cursor-pointer')) {
+          modal?.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+    });
+    
+    // Close modal
+    function hideModal() {
+      modal?.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+    
+    closeModal?.addEventListener('click', hideModal);
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        hideModal();
+      }
+    });
+    
+    // Handle escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal?.classList.contains('hidden')) {
+        hideModal();
+      }
+    });
+  });
+</script>
