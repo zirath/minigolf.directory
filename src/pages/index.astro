@@ -1,16 +1,174 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SearchForm from '../components/SearchForm.astro';
+import CourseCard from '../components/CourseCard.astro';
+import { getFeaturedCourses } from '../data/courses';
 
+const featuredCourses = getFeaturedCourses();
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout 
+  title="Minigolf.directory - Find the Best Mini Golf Courses"
+  description="Discover amazing mini golf courses near you. Browse reviews, ratings, and detailed information about the best mini golf destinations across the country."
+>
+  <Header />
+  
+  <main>
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-emerald-500 via-emerald-600 to-blue-600 text-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28">
+        <div class="text-center">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+            Find Your Next
+            <span class="block text-yellow-300">Mini Golf Adventure</span>
+          </h1>
+          <p class="text-xl lg:text-2xl mb-10 max-w-3xl mx-auto text-emerald-50 leading-relaxed">
+            Discover the best mini golf courses with detailed reviews, ratings, and information to help you plan the perfect outing.
+          </p>
+          
+          <div class="mb-12">
+            <SearchForm />
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div class="flex items-center text-emerald-100">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+              <span class="text-sm font-medium">Verified Reviews</span>
+            </div>
+            <div class="flex items-center text-emerald-100">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+              </svg>
+              <span class="text-sm font-medium">Detailed Ratings</span>
+            </div>
+            <div class="flex items-center text-emerald-100">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <span class="text-sm font-medium">Location Details</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Decorative wave -->
+      <div class="relative">
+        <svg class="absolute bottom-0 w-full h-12 text-gray-50" preserveAspectRatio="none" viewBox="0 0 1200 120" fill="currentColor">
+          <path d="M1200 120L0 16.48V120z"></path>
+        </svg>
+      </div>
+    </section>
+    
+    <!-- Featured Courses Section -->
+    <section class="py-16 lg:py-24 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Featured Mini Golf Courses
+          </h2>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+            Discover our hand-picked selection of the most amazing mini golf experiences
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          {featuredCourses.slice(0, 3).map((course) => (
+            <CourseCard course={course} featured={true} />
+          ))}
+        </div>
+        
+        <div class="text-center">
+          <a 
+            href="/courses" 
+            class="inline-flex items-center px-6 py-3 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors"
+          >
+            View All Courses
+            <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="py-16 lg:py-24 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            Why Choose Minigolf.directory?
+          </h2>
+          <p class="text-xl text-gray-600">
+            Your complete guide to mini golf adventures
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Easy Discovery</h3>
+            <p class="text-gray-600">
+              Find mini golf courses by location, theme, or features. Our powerful search makes discovery effortless.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.196-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Detailed Reviews</h3>
+            <p class="text-gray-600">
+              Read genuine reviews and ratings from fellow mini golf enthusiasts to make informed decisions.
+            </p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-gray-900 mb-4">Complete Information</h3>
+            <p class="text-gray-600">
+              Get all the details you need: hours, pricing, contact info, and special features for each course.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="py-16 lg:py-24 bg-gradient-to-r from-emerald-600 to-blue-600">
+      <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl lg:text-4xl font-bold text-white mb-6">
+          Ready for Your Mini Golf Adventure?
+        </h2>
+        <p class="text-xl text-emerald-100 mb-8 max-w-2xl mx-auto">
+          Browse our complete directory of mini golf courses and start planning your next fun-filled outing today.
+        </p>
+        <a 
+          href="/courses"
+          class="inline-flex items-center px-8 py-4 bg-white text-emerald-600 font-bold text-lg rounded-lg hover:bg-gray-50 transition-colors shadow-lg"
+        >
+          Explore All Courses
+          <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>

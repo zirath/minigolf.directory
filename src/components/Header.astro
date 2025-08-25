@@ -1,0 +1,61 @@
+---
+---
+
+<header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center">
+        <a href="/" class="flex items-center space-x-2 text-emerald-600 font-bold text-xl">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>
+          <span>Minigolf.directory</span>
+        </a>
+      </div>
+      
+      <nav class="hidden md:flex space-x-8">
+        <a href="/" class="text-gray-700 hover:text-emerald-600 transition-colors font-medium">
+          Home
+        </a>
+        <a href="/courses" class="text-gray-700 hover:text-emerald-600 transition-colors font-medium">
+          All Courses
+        </a>
+      </nav>
+      
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button type="button" class="text-gray-700 hover:text-emerald-600" id="mobile-menu-button">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div class="md:hidden hidden" id="mobile-menu">
+      <div class="px-2 pt-2 pb-3 space-y-1 border-t">
+        <a href="/" class="block px-3 py-2 text-gray-700 hover:text-emerald-600 font-medium">
+          Home
+        </a>
+        <a href="/courses" class="block px-3 py-2 text-gray-700 hover:text-emerald-600 font-medium">
+          All Courses
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Simple mobile menu toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+    
+    if (button && menu) {
+      button.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+      });
+    }
+  });
+</script>

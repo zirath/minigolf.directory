@@ -1,0 +1,203 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import CourseCard from '../../components/CourseCard.astro';
+import { courses, searchCourses } from '../../data/courses';
+
+const query = Astro.url.searchParams.get('q') || '';
+const filteredCourses = query ? searchCourses(query) : courses;
+
+const pageTitle = query 
+  ? `Search Results for "${query}" - Mini Golf Courses`
+  : 'All Mini Golf Courses - Minigolf.directory';
+
+const pageDescription = query
+  ? `Found ${filteredCourses.length} mini golf courses matching "${query}". Browse detailed information, ratings, and reviews.`
+  : 'Browse all mini golf courses in our directory. Find the perfect mini golf destination with detailed information, ratings, and reviews.';
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <Header />
+  
+  <main>
+    <!-- Header Section -->
+    <section class="bg-gradient-to-r from-emerald-500 to-blue-600 text-white py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          {query ? (
+            <>
+              <h1 class="text-3xl sm:text-4xl font-bold mb-4">
+                Search Results for "{query}"
+              </h1>
+              <p class="text-xl text-emerald-100 mb-6">
+                Found {filteredCourses.length} {filteredCourses.length === 1 ? 'course' : 'courses'} matching your search
+              </p>
+            </>
+          ) : (
+            <>
+              <h1 class="text-3xl sm:text-4xl font-bold mb-4">
+                All Mini Golf Courses
+              </h1>
+              <p class="text-xl text-emerald-100 mb-6">
+                Discover {courses.length} amazing mini golf destinations
+              </p>
+            </>
+          )}
+          
+          <!-- Search Form -->
+          <div class="max-w-2xl mx-auto">
+            <form action="/courses" method="get" class="flex flex-col sm:flex-row gap-3">
+              <div class="flex-1">
+                <input
+                  type="text"
+                  name="q"
+                  value={query}
+                  placeholder="Search by name, location, or theme..."
+                  class="w-full px-4 py-3 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-sm"
+                />
+              </div>
+              <button
+                type="submit"
+                class="px-6 py-3 bg-white text-emerald-600 font-medium rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+              >
+                Search
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Filters and Results -->
+    <section class="py-12 bg-gray-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Quick Filters -->
+        <div class="mb-8">
+          <div class="flex flex-wrap gap-2">
+            <span class="text-sm font-medium text-gray-700 self-center mr-4">Quick Filters:</span>
+            <a href="/courses" class={`text-sm px-3 py-1 rounded-full transition-colors ${!query ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}>
+              All Courses
+            </a>
+            <a href="/courses?q=glow" class={`text-sm px-3 py-1 rounded-full transition-colors ${query === 'glow' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}>
+              Glow-in-the-Dark
+            </a>
+            <a href="/courses?q=pirate" class={`text-sm px-3 py-1 rounded-full transition-colors ${query === 'pirate' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}>
+              Pirate Theme
+            </a>
+            <a href="/courses?q=indoor" class={`text-sm px-3 py-1 rounded-full transition-colors ${query === 'indoor' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}>
+              Indoor
+            </a>
+            <a href="/courses?q=florida" class={`text-sm px-3 py-1 rounded-full transition-colors ${query === 'florida' ? 'bg-emerald-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-100'}`}>
+              Florida
+            </a>
+          </div>
+        </div>
+        
+        <!-- Results Count and Sort -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+          <div class="text-gray-600">
+            Showing {filteredCourses.length} of {courses.length} courses
+            {query && <span class="text-emerald-600 font-medium">for "{query}"</span>}
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <label for="sort" class="text-sm text-gray-700">Sort by:</label>
+            <select id="sort" class="text-sm border border-gray-300 rounded px-3 py-1 bg-white">
+              <option value="featured">Featured</option>
+              <option value="rating">Highest Rated</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="name">Name: A to Z</option>
+            </select>
+          </div>
+        </div>
+        
+        <!-- Course Grid -->
+        {filteredCourses.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredCourses.map((course) => (
+              <CourseCard course={course} />
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-16">
+            <div class="max-w-md mx-auto">
+              <svg class="mx-auto h-24 w-24 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+              <h3 class="text-xl font-semibold text-gray-900 mb-2">No courses found</h3>
+              <p class="text-gray-600 mb-6">
+                We couldn't find any mini golf courses matching "{query}". Try searching with different keywords.
+              </p>
+              <div class="space-y-2">
+                <p class="text-sm text-gray-500">Try searching for:</p>
+                <div class="flex flex-wrap gap-2 justify-center">
+                  <a href="/courses?q=pirate" class="text-sm text-emerald-600 hover:text-emerald-700">Pirate</a>
+                  <span class="text-gray-300">•</span>
+                  <a href="/courses?q=glow" class="text-sm text-emerald-600 hover:text-emerald-700">Glow</a>
+                  <span class="text-gray-300">•</span>
+                  <a href="/courses?q=castle" class="text-sm text-emerald-600 hover:text-emerald-700">Castle</a>
+                  <span class="text-gray-300">•</span>
+                  <a href="/courses?q=tropical" class="text-sm text-emerald-600 hover:text-emerald-700">Tropical</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {filteredCourses.length > 6 && (
+          <div class="mt-12 text-center">
+            <p class="text-gray-600 mb-4">Want to add your mini golf course to our directory?</p>
+            <a href="#" class="text-emerald-600 hover:text-emerald-700 font-medium">
+              Submit Your Course →
+            </a>
+          </div>
+        )}
+      </div>
+    </section>
+    
+    <!-- Popular Searches -->
+    <section class="py-12 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Popular Searches</h2>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="/courses?q=adventure" class="bg-gray-100 hover:bg-emerald-100 px-4 py-2 rounded-full text-sm font-medium text-gray-700 hover:text-emerald-700 transition-colors">
+            Adventure Courses
+          </a>
+          <a href="/courses?q=family" class="bg-gray-100 hover:bg-emerald-100 px-4 py-2 rounded-full text-sm font-medium text-gray-700 hover:text-emerald-700 transition-colors">
+            Family Friendly
+          </a>
+          <a href="/courses?q=water" class="bg-gray-100 hover:bg-emerald-100 px-4 py-2 rounded-full text-sm font-medium text-gray-700 hover:text-emerald-700 transition-colors">
+            Water Features
+          </a>
+          <a href="/courses?q=dinosaur" class="bg-gray-100 hover:bg-emerald-100 px-4 py-2 rounded-full text-sm font-medium text-gray-700 hover:text-emerald-700 transition-colors">
+            Dinosaur Theme
+          </a>
+          <a href="/courses?q=windmill" class="bg-gray-100 hover:bg-emerald-100 px-4 py-2 rounded-full text-sm font-medium text-gray-700 hover:text-emerald-700 transition-colors">
+            Classic Windmills
+          </a>
+          <a href="/courses?q=caves" class="bg-gray-100 hover:bg-emerald-100 px-4 py-2 rounded-full text-sm font-medium text-gray-700 hover:text-emerald-700 transition-colors">
+            Cave Holes
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<script>
+  // Simple sort functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const sortSelect = document.getElementById('sort') as HTMLSelectElement;
+    if (sortSelect) {
+      sortSelect.addEventListener('change', () => {
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('sort', sortSelect.value);
+        window.location.href = currentUrl.toString();
+      });
+    }
+  });
+</script>
