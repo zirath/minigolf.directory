@@ -78,6 +78,15 @@ The project includes 8 sample mini golf courses with realistic data:
 - **HTML5** - Semantic markup
 - **JSON-LD** - Structured data for SEO
 
+## Development Guidelines
+
+This project follows established development best practices for AI-assisted development:
+
+- **📋 Development Standards**: See [CLAUDE.md](./CLAUDE.md) for comprehensive development guidelines
+- **📝 Implementation Planning**: Use [IMPLEMENTATION_PLAN_TEMPLATE.md](./IMPLEMENTATION_PLAN_TEMPLATE.md) for complex features
+- **🔧 Code Quality**: TypeScript-first, test-driven development, and incremental progress
+- **🎯 Astro Best Practices**: Static-first approach, minimal JavaScript, component composition
+
 ## Performance Features
 
 - Static site generation for fast loading
